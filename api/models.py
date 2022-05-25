@@ -1,9 +1,10 @@
 from django.db.models import Model,AutoField,TextField,CASCADE,BooleanField,DateTimeField,SmallIntegerField,ManyToOneRel,ForeignKey
 from django.conf import settings
+from rest_framework import serializers
 # Create your models here.
 
-
-class Project(Model):
+#Default models class
+class ProjectModel(Model):
     id = AutoField('id',primary_key=True,null=False,blank=False)
     name = TextField('name',null=False,blank=False)
     favorite = BooleanField('favorite',default=False)
@@ -13,7 +14,8 @@ class ToDoItem(Model):
     id = AutoField('id',primary_key=True,null=False,blank=False)
     title = TextField('title',null=False,blank=False)
     complete = BooleanField('complete',default=False)
-    project = ForeignKey(Project,on_delete=CASCADE)
+    important = BooleanField('important',default=False)
+    project = ForeignKey(ProjectModel,on_delete=CASCADE)
 
 class SubTasks(Model):
     id = AutoField('id',primary_key=True,null=False,blank=False)
@@ -25,4 +27,14 @@ class SubTasks(Model):
     priority = SmallIntegerField('priority')
     todositem = ForeignKey(ToDoItem,on_delete=CASCADE)
 
-
+#Class serializers
+class ProjectSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    favorite = serializers.BooleanField()
+    
+class ToDoItemSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    title = serializers.CharField()
+    complete = serializers.BooleanField()
+    important = serializers.BooleanField()
